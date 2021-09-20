@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export default function CountrySelector({countries}) {
+export default function CountrySelector({countries, handleOnChange, value}) {
     const classes = useStyles();
 
     return (
@@ -17,6 +17,8 @@ export default function CountrySelector({countries}) {
             <FormControl className={classes.formControl}>
                 <InputLabel shrink htmlFor="country-selector">Quốc Gia</InputLabel>
                 <NativeSelect
+                    value={value}
+                    onChange={handleOnChange}
                     inputProps = {{
                         name: 'country',
                         id: 'country-selector'
@@ -24,7 +26,7 @@ export default function CountrySelector({countries}) {
                 >
                     {
                         countries.map((country) => (
-                            <option key={country.ISO2} value={country.ISO2.toLowerCase()}>
+                            <option key={country.ISO2} value={country.ISO2}>
                                 {country.Country}
                             </option>
                         ))
