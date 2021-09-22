@@ -1,9 +1,12 @@
 import React, {useState, useEffect} from 'react'
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import { Button  } from '@material-ui/core';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import moment from 'moment';
 
 const generateOptions  = (data) => {
-    const categories = [];
+    const categories = data.map((item) => moment(item.Date).format('DD/MM/YYYY'));
 
     return {
         chart: {
@@ -49,16 +52,52 @@ const generateOptions  = (data) => {
   
 
 export default function LineChart({data}) {
-    const [options, setOptions] = useState({})
+    const [options, setOptions] = useState({});
+    const [styleButton, setStyleButton] = useState('all');
+    
 
     console.log({data});
 
     useEffect(() => {
-        setOptions(generateOptions(data));
-    }, [data])
+        let customData  = [];
+        switch (styleButton) {
+            case 'all':
+                customData = data; 
+                break;
+            case '7': 
+                customData = data.slice(Math.max(data.length - 7, 1));
+                break;
+            case '30': 
+                customData = data.slice(Math.max(data.length - 30, 1));
+                break;
+            default:
+                customData = data;
+        }
+
+        
+        setOptions(generateOptions(customData));
+    }, [data, styleButton])
+
 
     return (
         <div>
+            <ButtonGroup color="primary" aria-label="outlined primary button group">
+                <Button 
+                    color={styleButton === '7' ? 'secondary' : ''}
+                    onClick={() => setStyleButton('7')}> 
+                    1 Tuần
+                </Button>
+                <Button
+                    color={styleButton === '30' ? 'secondary' : ''}
+                    onClick={() => setStyleButton('30')}>
+                    1 Tháng
+                </Button>
+                <Button
+                    color={styleButton === 'all' ? 'secondary' : ''}
+                    onClick={() => setStyleButton('all')}>
+                    Tất Cả
+                </Button>
+            </ButtonGroup>
             <HighchartsReact
                 highcharts={Highcharts}
                 options={options}

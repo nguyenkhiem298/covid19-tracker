@@ -27,7 +27,7 @@ export default function CountrySelector({countries, handleOnChange, value}) {
                     {
                         countries.map((country) => (
                             <option key={country.ISO2} value={country.ISO2}>
-                                {country.Country}
+                                {country.Country}   
                             </option>
                         ))
                     }
